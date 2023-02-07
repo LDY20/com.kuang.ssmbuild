@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--一个<mapper></mapper>对应一个接口；  将写好的接口绑定到mapper中-->
+<mapper namespace="com.kuang.dao.BookMapper"> <!--绑定接口-->
+
+    <!--对应这个接口写sql语句 -->
+
+    <!--增加一本书-->
+    <insert id="addBook"    parameterType="Books">
+        insert into ssmbuild.books(bookName,bookCounts,detail)
+        values (#{bookName},#{bookCounts},#{detail})
+    </insert>
+
+    <!--根据id删除一本书-->
+    <delete id="deleteBookById" parameterType="int">
+        delete from ssmbuild.books where bookID = #{bookId}
+    </delete>
+
+    <!--更新一本书-->
+    <update id="updateBook" parameterType="Books">
+        update ssmbuild.book
+        set bookName=#{bookName},bookCounts=#{bookCounts},detail=#{detail}
+        where bookID=#{bookID}
+    </update>
+
+    <!--根据id查询,返回一本书-->
+    <select id="queryBookById" resultType="Books">
+        select * from ssmbuild.books where bookID=#{bookId}
+    </select>
+
+    <!--查询全部书籍-->
+    <select id="queryAllBook" resultType="Books">
+        select * from ssmbuild.books
+    </select>
+
+    <!--parameterType和resultType都是参数类型-->
+
+<!--
+1、使用 resultType：主要针对于从数据库中提取相应的数据出来
+2、使用parameterType：主要针对于将信息存入到数据库中 如：insert 增加数据到数据库中   Update更新等-->
+</mapper>

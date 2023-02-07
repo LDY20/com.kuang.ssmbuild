@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/tool/spring-mvc.xsd
+       http://www.springframework.org/schema/context
+       https://www.springframework.org/schema/context/spring-context.xsd">
+
+
+    <!--1.注解驱动:开启SpringMvc注解驱动-->
+    <mvc:annotation-driven conversion-service="conversionService"/>  <!--使用注解驱动后会自动加载处理器映射器、处理器适配器、视图解析器-->
+    <!--开启注解驱动后同时会集成jackson进行对象或集合的json格式的字符串转换-->
+
+    <!--声明自定义转换器-->
+    <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
+        <property name="converters">
+            <list>
+                <bean class="com.kuang.converter.DateConverter"></bean>
+            </list>
+        </property>
+    </bean>
+
+    <!--2.静态资源默认servlet配置，类似于js，css以及一些图片的权限开放-->
+    <mvc:default-servlet-handler/>
+
+    <!--3.组件扫描包：controller层使用注解后会扫描该层下的bean（扫描web相关的bean）-->
+    <context:component-scan base-package="com.kuang.controller"/>
+
+    <!--  <context:component-scan base-package="com.kuang">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>  扫描com.kuang下的包含@Controller注解  exclude则不包含    -->
+
+    <!--4.视图解析器（配置jsp 显示ViewResolver视图解析器）-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
+        <property name="prefix" value="/WEB-INF/jsp/" /> <!--前缀-->
+        <property name="suffix" value=".jsp" />  <!--后缀-->
+    </bean>
+
+
+
+    <!--配置文件上传解析器-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!--上传文件总大小-->
+        <property name="maxUploadSize" value="5242800"/>
+        <!--上传单个文件的大小-->
+        <property name="maxUploadSizePerFile" value="52452800"/>
+        <!--上传文件的类型编码类型-->
+        <property name="defaultEncoding" value="UTF-8"/>
+    </bean>
+
+    <!--自定义异常处理器-->
+    <bean class="com.kuang.exception.MyExceptionResolver"/>
+
+    <!--配置拦截器interceptor-->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <!--对哪些资源执行拦截操作-->
+            <mvc:mapping path="/**"/> <!--/**指对所有的方法都进行拦截操作;若是/xxx/** 则是xxx下的所有方法进行拦截-->
+            <mvc:exclude-mapping path="/user/login"/> <!--对某些资源不进行拦截，一般是登录操作不进行拦截-->
+            <bean class="com.kuang.interceptor.MyInterceptor1"/> <!--已经写好的拦截器类-->
+        </mvc:interceptor>
+
+        <!--多个拦截器-->
+        <!--<mvc:interceptor>
+            &lt;!&ndash;对哪些资源执行拦截操作&ndash;&gt;
+            <mvc:mapping path="/**"/> &lt;!&ndash;/**指对所有的方法都进行拦截操作;若是/xxx/** 则是xxx下的所有方法进行拦截&ndash;&gt;
+
+            <bean class="com.kuang.interceptor.MyInterceptor2"/> &lt;!&ndash;已经写好的拦截器类&ndash;&gt;
+        </mvc:interceptor>-->
+    </mvc:interceptors>
+
+</beans>

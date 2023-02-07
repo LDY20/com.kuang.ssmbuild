@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <!--配置数据源，交给Spring去做-->
+    <typeAliases>
+        <package name="com.kuang.pojo"/>
+<!--  或者：   <typeAlias type="com.kuang.pojo.Books" alias="books"></typeAlias>-->
+    </typeAliases>
+
+
+
+    <mappers>
+        <mapper resource="com.kuang.dao.BookMapper.xml"/>
+    </mappers>
+    <!--mybatis的mapper映射文件的加载(resource方式,class方式,以及包扫描)
+			1.resource方式加载映射文件
+				<mappers><mapper resource="xxx/xxx/.xml"/></mappers>
+
+			2.class方式:这里需要注意:接口类 和映射文件放在同一个目录下，并文件名要一致
+				<mappers><mapper class="com.kuang.dao"/></mappers>
+
+			3.包扫描加载映射文件 : 接口类 和映射文件放在同一个目录下，并文件名要一致
+				<mappers><package name="com.kuang.dao"/></mappers> -->
+
+
+
+
+</configuration>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+
+    <import resource="spring-service.xml"/>
+
+    <!--1.扫描service下的包：只要该目录下有@Service注解就会被扫描到-->
+    <context:component-scan base-package="com.kuang.service"/>
+
+    <!--2.将我们的所有业务类注入到Spring，可以通过配置，或者注解（@Service   @Autowired）-->
+    <bean id="BookServiceImpl" class="com.kuang.service.BookServiceImpl">
+        <property name="bookMapper" ref="bookMapper"/>
+        <!--通过配置：
+         <import resource="classpath:spring-service-dao.xml"
+         或者通过IDEA自动放到同一个上下文中
+         -->
+
+    </bean>
+
+    <!--3.声明式事务配置-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <!--注入数据源-->
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+
+    <!--4.AOP事务支持（具体横切到哪里）-->
+
+</beans>

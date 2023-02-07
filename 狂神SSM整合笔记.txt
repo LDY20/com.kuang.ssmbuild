@@ -1,0 +1,138 @@
+SSM整合：
+1.在IDEA中新建Maven：
+	配置pom.xml文件
+		相关依赖：
+			数据库驱动，数据库连接池，servlet，jsp，spring，mybatis
+		静态资源导出：
+			目录下的.properties和.xml文件，过滤器
+			
+2.建立基本的结构和配置框架：
+	包结构：
+		com.kuang.entity/model/pojo 实体层
+		存放实体类。对应数据库表的实体类
+	
+		com.kuang.dao/mapper 持久层/数据访问层
+
+		存放我们的实体类，与数据库中的属性值基本保持一致。
+		对数据库进行数据持久化操作，它的方法语句是直接针对数据库操作的，具体到对于某个表、某个实体的增删改查
+		
+		com.kuang.service  业务层
+		存放业务逻辑处理，也是一些关于数据库处理的操作，但不是直接和数据库打交道，它有接口以及接口的实现方法(可以细分为service接口和serviceImpl实现类。)，在接口的实现方法中需要导入mapper层，mapper层是直接跟数据库打交道的，它也是个接口，只有方法名字，具体实现在mapper.xml文件里，service是供我们使用的方法。
+		
+		com.kuang.controller 控制层
+		控制器，导入service层，因为service中的方法是我们使用到的，controller通过接收前端传过来的参数进行业务操作，再返回一个指定的路径或者数据表
+		
+		
+
+		
+		
+	配置框架：
+		mybatis的配置文件：mybatis-config.xml
+		spring的配置文件：applicationContext.xml
+		
+
+
+
+		
+3.Mybatis层编写
+	Mybatis层的配置文件：database.properties
+			一些数据库连接配置，注意，若使用MySQL8.0以上版本，则需要加时区	
+	
+	编写Mybatis的配置文件 mybatis-config.xml文件
+	
+	编写实体类pojo：（与数据库对应的实体类）	
+		使用在pom.xml中像导入依赖一样导入Lombok插件（在实体层中以注解形式使用），方便生成setter/getter、有参/无参构造方法
+		
+		实体类到此写好了
+		
+	编Dao层的Mapper接口：
+		
+	编写对应接口的Mapper.xml文件 	
+		一个mapper对应一个接口
+		写sql语句
+		
+	写好Mapper.xml后立即绑定到配置文件中（mybatis-config.xml）
+		mybatis的mapper映射文件的加载(resource方式,class方式,以及包扫描)
+			(1)resource方式加载映射文件 
+				<mappers><mapper resource="xxx/xxx/.xml"/></mappers>
+			
+			(2)class方式:这里需要注意:接口类 和映射文件放在同一个目录下，并文件名要一致
+				<mappers><mapper class="com.kuang.dao"/></mappers>
+			
+			(3)包扫描加载映射文件 : 接口类 和映射文件放在同一个目录下，并文件名要一致
+				<mappers><package name="com.kuang.dao"/></mappers>
+				
+				
+				
+				
+	************Dao层搞定！*************
+	*********实体类----接口----mapper.xml文件**********
+
+
+
+
+业务层的编写（service层）
+	业务是跟数据库对应的 业务还是做增删改查操作
+	写好接口后写对应的实现类（service层调Dao层：将Dao层放进来）
+	
+	
+	
+	
+4.Spring层的编写：
+	Spring整合Dao层：spring-dao.xml
+		关联数据库配置文件database.properties
+		连接数据库池
+		创建sqlSessionFactory
+		自动配置dao层接口扫描包
+		
+	Spring整合service层：spring-service.xml
+		扫描service下的包，有@Service注解就会被扫描到
+		将所有业务类注入到Spring中
+		事务配置
+		AOP事务支持（除查询操作外都需要用到事务）
+
+*********************************
+******Spring层结束************
+
+
+SpringMVC层的编写：
+	将整个项目添加对Web的支持
+		在web.xml文件配置：DispatchService、乱码过滤、session
+	创建spring-mvc.xml文件并添加到上下文中
+		注解驱动:开启SpringMvc注解驱动
+		静态资源默认servlet配置
+		扫描web相关的bean
+		视图解析器（配置jsp 显示ViewResolver视图解析器）
+			在WEB下创建jsp的前缀
+			
+**************************************
+******配置文件暂时结束，框架大部分已经搭建好了***********
+********开始写功能业务***************
+
+
+Controller层编写：
+	(将controller层和jsp交互起来即可)
+
+		@RequestMapping注解的用法https://www.cnblogs.com/jpfss/p/9546142.html
+	
+	创建controller类调用service层，与jsp交互
+	
+	
+	写jsp界面（前端边写边改）
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

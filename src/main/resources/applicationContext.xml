@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!--什么是Bean？Bean可理解为对象，由交给Spring去托管的对象都可以称之为Bean-->
+
+
+    <import resource="classpath:spring-service.xml"/>
+    <import resource="classpath:spring-dao.xml"/>
+
+    <import resource="classpath:spring-mvc.xml"/>
+    <!--import resource=""导入其他spring的分文件-->
+
+
+
+    <!--aop的一些配置-->
+    <!--目标对象-->
+    <bean id="target" class="com.kuang.AOP.aop_xml.Target"></bean>
+
+    <!--切面对象-->
+    <bean id="myAspect" class="com.kuang.AOP.aop_xml.MyAspect"></bean>
+
+    <!--配置织入：即告诉Spring哪些方法（切点）需要进行哪些增强（通知）；前置，后置，环绕，异常，最终-->
+    <aop:config>
+        <!--声明切面-->
+        <aop:aspect ref="myAspect">
+            <!--切面：切点+通知（增强）-->
+            <!--<aop:before method="before1" pointcut="execution(public void com.kuang.AOP.aop_xml.Target.save())"/>-->
+            <!--<aop:before method="before1" pointcut="execution(* com.kuang.AOP..*.*(..))"/>-->
+            <!--<aop:after-returning method="after1" pointcut="execution(* com.kuang.AOP..*.*(..))"/>-->
+            <!--<aop:around method="around1" pointcut="execution(* com.kuang.AOP..*.*(..))"/>-->
+            <!--<aop:after-throwing method="throwing1" pointcut="execution(* com.kuang.AOP..*.*(..))"/>-->
+            <!--<aop:after method="after2" pointcut="execution(* com.kuang.AOP..*.*(..))"/>-->
+            
+            
+            <!--抽取切点表达式-->
+            <aop:pointcut id="myPointcut" expression="execution(* com.kuang.AOP..*.*(..))"/>
+
+            <aop:before method="before1" pointcut-ref="myPointcut"/>
+            <aop:after method="after1" pointcut-ref="myPointcut"/>
+            
+        </aop:aspect>
+    </aop:config>
+</beans>
